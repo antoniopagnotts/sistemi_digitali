@@ -49,6 +49,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -76,6 +77,21 @@ public class MainActivity extends AppCompatActivity {
     //Speech to text variables
     Button speech_to_text_button;
 
+    //Locations' data
+    final int CITTA_DORO = 0;
+    final int ENOTECA_ITALIANA = 1;
+    final int FORNO_BRISA = 2;
+    final int LA_FORCHETTA = 3;
+    final int LA_PIZZA_DA_ZERO = 4;
+    final int NUOVO_CAFFE_DEL_PORTO = 5;
+    final int POKE_RAINBOW_CAFFE = 6;
+    final int TRATTORIA_BELFIORE = 7;
+    //data used in putCoordinate to set the hashMap values
+    final int LATITUDE = 0;
+    final int LONGITUDE = 1;
+
+    HashMap<Integer, HashMap<Integer,Double>> locationHashmap = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +110,9 @@ public class MainActivity extends AppCompatActivity {
                 openSpeechToTextActivity();
             }
         });
+
+        //initialize locations' HashMap
+        initializeHashMapValues();
 
         //Location on map
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -312,6 +331,33 @@ public class MainActivity extends AppCompatActivity {
             }
             return stringBuilder.toString();
         }
+    }
+
+    public void initializeHashMapValues(){
+        HashMap<Integer,Double> locationHashmapData = new HashMap<Integer,Double>();
+
+        this.locationHashmap.put(CITTA_DORO,putCoordinate(44.5045183,11.3397822));
+        this.locationHashmap.put(ENOTECA_ITALIANA,putCoordinate(44.4967059,11.3391671));
+        this.locationHashmap.put(FORNO_BRISA,putCoordinate(44.4967052,11.3391671));
+        this.locationHashmap.put(LA_FORCHETTA,putCoordinate(44.5080911,11.3520538));
+        this.locationHashmap.put(LA_PIZZA_DA_ZERO,putCoordinate(0.0,0.0));
+        this.locationHashmap.put(NUOVO_CAFFE_DEL_PORTO,putCoordinate(44.5012647,11.3309974));
+        this.locationHashmap.put(POKE_RAINBOW_CAFFE,putCoordinate(44.4985837,11.3294094));
+        this.locationHashmap.put(TRATTORIA_BELFIORE,putCoordinate(44.4974444,11.3359676));
+
+    }
+
+    /**
+     *
+     * @param latitude
+     * @param longitude
+     * @return the HashMap with the coordinate
+     */
+    public HashMap<Integer,Double> putCoordinate(double latitude, double longitude){
+        HashMap<Integer,Double> values = new HashMap<>();
+        values.put(LONGITUDE,longitude);
+        values.put(LATITUDE,latitude);
+        return values;
     }
 
     /**
