@@ -64,6 +64,10 @@ public class SpeechToTextActivity extends AppCompatActivity {
                         RecognizerIntent.EXTRA_RESULTS);
                 tv_Speech_to_text.setText(
                         Objects.requireNonNull(result).get(0));
+                //PER ANTO
+                //bisogna vedere se quello che ha trovato si trova tra i ristoranti
+                //se si: la voce robotica legge il file con il menu
+                //se no: voce robotica dice: il ristorante non è nel database, ritenta
             }
         }
     }

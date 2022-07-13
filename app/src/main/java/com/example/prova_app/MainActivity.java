@@ -61,8 +61,7 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     public static final int REQUEST_IMAGE = 100;
-    int imageSize = 640;
-    int imageSize1 = 360;
+    int imageSize = 160;
     @BindView(R.id.imageView)
     ImageView imgProfile;
     @BindView(R.id.result)
@@ -205,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
                     int dimension = Math.min(bitmap1.getWidth(), bitmap1.getHeight());
                     bitmap1 = ThumbnailUtils.extractThumbnail(bitmap1, dimension, dimension);
 
-                    bitmap1 = Bitmap.createScaledBitmap(bitmap1, imageSize, imageSize1, false);
+                    bitmap1 = Bitmap.createScaledBitmap(bitmap1, imageSize, imageSize, false);
 
                     //classifyImage();
                 } catch (IOException e) {
@@ -221,16 +220,16 @@ public class MainActivity extends AppCompatActivity {
             Model model = Model.newInstance(getApplicationContext());
 
             // Creates inputs for reference.
-            TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 640, 360, 3}, DataType.FLOAT32);
-            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * imageSize * imageSize1 * 3);
+            TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 160, 160, 3}, DataType.FLOAT32);
+            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * imageSize * imageSize * 3);
             byteBuffer.order(ByteOrder.nativeOrder());
 
-            int[] intValues = new int[imageSize * imageSize1];
+            int[] intValues = new int[imageSize * imageSize];
             bitmap1.getPixels(intValues, 0, bitmap1.getWidth(), 0, 0, bitmap1.getWidth(), bitmap1.getHeight());
             int pixel = 0;
             //iterate over each pixel and extract R, G, and B values. Add those values individually to the byte buffer.
             for (int i = 0; i < imageSize; i++) {
-                for (int j = 0; j < imageSize1; j++) {
+                for (int j = 0; j < imageSize; j++) {
                     int val = intValues[pixel++]; // RGB
                     byteBuffer.putFloat(((val >> 16) & 0xFF) * (1.f / 1));
                     byteBuffer.putFloat(((val >> 8) & 0xFF) * (1.f / 1));
@@ -250,19 +249,28 @@ public class MainActivity extends AppCompatActivity {
             float maxConfidence = 0;
             String[] classes = {"Citta D'oro", "Enoteca Italiana", "Forno Brisa", "La Forchetta",
                     "La Pizza Da Zero", "Nuovo Caffè del Porto", "Pokè Rainbow Caffè", "Trattoria Belfiore"};
-
+            for (int i = 0; i < confidences.length; i++) {
+                confidences[i]=confidences[i]*100;
+            }
             for (int i = 0; i < confidences.length; i++) {
                 if (confidences[i] > maxConfidence) {
                     maxConfidence = confidences[i];
                     maxPos = i;
                 }
             }
-
-            String s = "";
-            for (int i = 0; i < classes.length; i++) {
-                s += String.format("%s: %.1f%%\n", classes[i], confidences[i]);
+            String res = "";
+            if(maxConfidence>90){
+                res += String.format("%s: %.1f%%\n", classes[maxPos], confidences[maxPos]);
             }
-            s+=textFromImage(bitmap1)+"\n";
+            else{
+                res +=textFromImage(bitmap1)+"\n";
+            }
+
+            //PER ANTO
+            //devi verificare se il locale che si trova in classes[maxPos]
+            //si trova a distanza <= di 10metri dalla mia posizione attuale
+            //se si allora (poi ci penso io)
+            //se no allora (poi ci penso io)
 
             if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -272,7 +280,8 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 44);
 
             }
-            result.setText("\n" + s + classes[maxPos] + "\n" +
+
+            result.setText("\n" + res + classes[maxPos] + "\n" +
                     "Latitude: " + latitude + "\n" +
                     "Longitude: " + longitude);
 
