@@ -3,6 +3,7 @@ package com.example.prova_app;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -281,6 +282,62 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
+            int local = -1;
+            double localLongitude = -1;
+            double localLatitude = -1;
+            switch(classes[maxPos]){
+                case "Citta D'oro":
+                    localLongitude = locationHashmap.get(CITTA_DORO).get(LONGITUDE);
+                    localLatitude = locationHashmap.get(CITTA_DORO).get(LATITUDE);
+                case "Enoteca Italiana":
+                    localLongitude = locationHashmap.get(ENOTECA_ITALIANA).get(LONGITUDE);
+                    localLatitude = locationHashmap.get(CITTA_DORO).get(LATITUDE);
+                case "Forno Brisa":
+                    localLongitude = locationHashmap.get(FORNO_BRISA).get(LONGITUDE);
+                    localLatitude = locationHashmap.get(CITTA_DORO).get(LATITUDE);
+                case "La Forchetta":
+                    localLongitude = locationHashmap.get(LA_FORCHETTA).get(LONGITUDE);
+                    localLatitude = locationHashmap.get(CITTA_DORO).get(LATITUDE);
+                case "La Pizza Da Zero":
+                    localLongitude = locationHashmap.get(LA_PIZZA_DA_ZERO).get(LONGITUDE);
+                    localLatitude = locationHashmap.get(CITTA_DORO).get(LATITUDE);
+                case "Nuovo Caffè del Porto":
+                    localLongitude = locationHashmap.get(NUOVO_CAFFE_DEL_PORTO).get(LONGITUDE);
+                    localLatitude = locationHashmap.get(CITTA_DORO).get(LATITUDE);
+                case "Pokè Rainbow Caffè":
+                    localLongitude = locationHashmap.get(POKE_RAINBOW_CAFFE).get(LONGITUDE);
+                    localLatitude = locationHashmap.get(CITTA_DORO).get(LATITUDE);
+                case "Trattoria Belfiore":
+                    localLongitude = locationHashmap.get(TRATTORIA_BELFIORE).get(LONGITUDE);
+                    localLatitude = locationHashmap.get(CITTA_DORO).get(LATITUDE);
+                default:
+                    localLatitude = -1;
+                    localLongitude = -1;
+            }
+
+            //considering the accurancy of google maps (20 meters circa), we consider for a good accurancy 30meters
+            if(calculateDistanceOfTheUserFromTheLocal(latitude,longitude,localLatitude,localLongitude)>30){
+                new AlertDialog.Builder(this.getApplicationContext())
+                        .setTitle("Delete entry")
+                        .setMessage("Are you sure you want to delete this entry?")
+
+                        // Specifying a listener allows you to take an action before dismissing the dialog.
+                        // The dialog is automatically dismissed when a dialog button is clicked.
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Continue with delete operation
+                            }
+                        })
+
+                        // A null listener allows the button to dismiss the dialog and take no further action.
+                        .setNegativeButton(android.R.string.no, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+
+            }
+
+
+
             result.setText("\n" + res + classes[maxPos] + "\n" +
                     "Latitude: " + latitude + "\n" +
                     "Longitude: " + longitude);
@@ -290,6 +347,27 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             // TODO Handle the exception
         }
+    }
+
+    /**
+     *
+     * @param lat1
+     * @param lon1
+     * @param lat2
+     * @param lon2
+     * @return the distance in meter from the user and the local
+     * It's been used the Haversine Formula
+     */
+    private double calculateDistanceOfTheUserFromTheLocal(double lat1, double lon1, double lat2, double lon2){
+        double R = 6378.137; // Radius of earth in KM
+        double dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
+        double dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
+        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                        Math.sin(dLon/2) * Math.sin(dLon/2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double d = R * c;
+        return d * 1000; // meters
     }
 
     /**
