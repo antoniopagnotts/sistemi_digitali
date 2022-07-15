@@ -3,9 +3,11 @@ package com.example.prova_app;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
@@ -44,9 +46,12 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
@@ -60,6 +65,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
+    private String trovato = null;
     private static final String TAG = MainActivity.class.getSimpleName();
     public static final int REQUEST_IMAGE = 100;
     int imageSize = 160;
@@ -214,6 +220,41 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+    @OnClick({R.id.openMenu})
+    void openMenu(){
+        TextView output= (TextView) findViewById(R.id.result);
+        StringBuilder text = new StringBuilder();
+        output.setText("");
+        BufferedReader reader = null;
+        Context context = this.getApplicationContext();
+        try {
+            AssetManager am = context.getAssets();
+            InputStream is = am.open(trovato+".txt");
+
+            reader = new BufferedReader(
+                    new InputStreamReader(is));
+
+            // do reading, usually loop until end of file reading
+            String mLine = null;
+            while ((mLine = reader.readLine()) != null) {
+                text.append(mLine);
+                text.append('\n');
+            }
+        } catch (IOException e) {
+            Toast.makeText(getApplicationContext(),"Error reading file!",Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    //log the exception
+                }
+            }
+            output.setText((CharSequence) text);
+            trovato = "";
+        }
+    }
 
     @OnClick({R.id.scan})
     void classifyImage() {
@@ -259,6 +300,7 @@ public class MainActivity extends AppCompatActivity {
                     maxPos = i;
                 }
             }
+            trovato = classes[maxPos];
             String res = "";
             if(maxConfidence>90){
                 res += String.format("%s: %.1f%%\n", classes[maxPos], confidences[maxPos]);
@@ -316,7 +358,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             //considering the accurancy of google maps (20 meters circa), we consider for a good accurancy 30meters
-            if(calculateDistanceOfTheUserFromTheLocal(latitude,longitude,localLatitude,localLongitude)>30){
+            /*if(calculateDistanceOfTheUserFromTheLocal(latitude,longitude,localLatitude,localLongitude)>30){
                 new AlertDialog.Builder(this.getApplicationContext())
                         .setTitle("Delete entry")
                         .setMessage("Are you sure you want to delete this entry?")
@@ -336,8 +378,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
-
-
+             */
             result.setText("\n" + res + classes[maxPos] + "\n" +
                     "Latitude: " + latitude + "\n" +
                     "Longitude: " + longitude);
@@ -348,6 +389,7 @@ public class MainActivity extends AppCompatActivity {
             // TODO Handle the exception
         }
     }
+
 
     /**
      *

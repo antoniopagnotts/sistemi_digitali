@@ -26,21 +26,21 @@
         android:text="Take Photo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/scan"
-        app:layout_constraintHorizontal_bias="0.442"
+        app:layout_constraintHorizontal_bias="0.288"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.205" />
+        app:layout_constraintVertical_bias="0.088" />
 
     <Button
         android:id="@+id/scan"
         android:layout_width="88dp"
         android:layout_height="48dp"
-        android:layout_marginEnd="64dp"
+        android:layout_marginEnd="56dp"
         android:text="Scan"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.205" />
+        app:layout_constraintVertical_bias="0.088" />
 
     <Button
         android:id="@+id/speech_to_text_button"
@@ -49,17 +49,32 @@
         android:text="Speech to Text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.141"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/result" />
+        app:layout_constraintTop_toBottomOf="@+id/result"
+        app:layout_constraintVertical_bias="0.6" />
 
     <TextView
         android:id="@+id/result"
-        android:layout_width="294dp"
+        android:layout_width="323dp"
         android:layout_height="222dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.606" />
+        app:layout_constraintVertical_bias="0.474" />
+
+    <Button
+        android:id="@+id/openMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Open Menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.578"
+        app:layout_constraintStart_toEndOf="@+id/speech_to_text_button"
+        app:layout_constraintTop_toBottomOf="@+id/result"
+        app:layout_constraintVertical_bias="0.6" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
