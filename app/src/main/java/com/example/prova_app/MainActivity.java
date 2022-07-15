@@ -315,33 +315,16 @@ public class MainActivity extends AppCompatActivity {
                     localLongitude = -1;
             }
 
-            //considering the accurancy of google maps (20 meters circa), we consider for a good accurancy 30meters
-            if(calculateDistanceOfTheUserFromTheLocal(latitude,longitude,localLatitude,localLongitude)>30){
-                new AlertDialog.Builder(this.getApplicationContext())
-                        .setTitle("Delete entry")
-                        .setMessage("Are you sure you want to delete this entry?")
-
-                        // Specifying a listener allows you to take an action before dismissing the dialog.
-                        // The dialog is automatically dismissed when a dialog button is clicked.
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Continue with delete operation
-                            }
-                        })
-
-                        // A null listener allows the button to dismiss the dialog and take no further action.
-                        .setNegativeButton(android.R.string.no, null)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
-
+            double calculatedDistance = calculateDistanceOfTheUserFromTheLocal(latitude,longitude,localLatitude,localLongitude);
+            if (calculatedDistance>=30) {
+                result.setText("\n" + "You seems to be far away from the local!\n" + res + classes[maxPos] + "\n" +
+                        "Latitude: " + latitude + "\n" +
+                        "Longitude: " + longitude);
+            } else {
+                result.setText("\n" + "You are at" + calculatedDistance +"meters from the local\n" + res + classes[maxPos] + "\n" +
+                        "Latitude: " + latitude + "\n" +
+                        "Longitude: " + longitude);
             }
-
-
-
-            result.setText("\n" + res + classes[maxPos] + "\n" +
-                    "Latitude: " + latitude + "\n" +
-                    "Longitude: " + longitude);
-
             // Releases model resources if no longer used.
             model.close();
         } catch (IOException e) {
