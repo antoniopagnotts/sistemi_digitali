@@ -309,24 +309,19 @@ public class MainActivity extends AppCompatActivity {
                 res +=textFromImage(bitmap1)+"\n";
             }
 
-            //PER ANTO
-            //devi verificare se il locale che si trova in classes[maxPos]
-            //si trova a distanza <= di 10metri dalla mia posizione attuale
-            //se si allora (poi ci penso io)
-            //se no allora (poi ci penso io)
-
             if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 getLocation();
             } else {
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 44);
-
             }
 
-            int local = -1;
-            double localLongitude = -1;
-            double localLatitude = -1;
+            //getLocation();
+
+            /*
+            double localLongitude;
+            double localLatitude;
             switch(classes[maxPos]){
                 case "Citta D'oro":
                     localLongitude = locationHashmap.get(CITTA_DORO).get(LONGITUDE);
@@ -357,7 +352,9 @@ public class MainActivity extends AppCompatActivity {
                     localLongitude = -1;
             }
 
-            double calculatedDistance = calculateDistanceOfTheUserFromTheLocal(latitude,longitude,localLatitude,localLongitude);
+
+            double calculatedDistance = -1000;
+            calculatedDistance = calculateDistanceOfTheUserFromTheLocal(latitude,longitude,localLatitude,localLongitude);
             //considering the accurancy of google maps (20 meters circa), we consider for a good accurancy 30meters
             if(calculatedDistance>30){
                 result.setText("\n" + "You are far away from the local ("+ calculatedDistance + " meters)!\n" + res + classes[maxPos] + "\n" +
@@ -368,9 +365,7 @@ public class MainActivity extends AppCompatActivity {
                         "Latitude: " + latitude + "\n" +
                         "Longitude: " + longitude);
             }
-
-
-
+            */
             // Releases model resources if no longer used.
             model.close();
         } catch (IOException e) {
