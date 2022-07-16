@@ -325,32 +325,40 @@ public class MainActivity extends AppCompatActivity {
                 case "Citta D'oro":
                     localLongitude = locationHashmap.get(CITTA_DORO).get(LONGITUDE);
                     localLatitude = locationHashmap.get(CITTA_DORO).get(LATITUDE);
+                    break;
                 case "Enoteca Italiana":
                     localLongitude = locationHashmap.get(ENOTECA_ITALIANA).get(LONGITUDE);
                     localLatitude = locationHashmap.get(CITTA_DORO).get(LATITUDE);
+                    break;
                 case "Forno Brisa":
                     localLongitude = locationHashmap.get(FORNO_BRISA).get(LONGITUDE);
                     localLatitude = locationHashmap.get(CITTA_DORO).get(LATITUDE);
+                    break;
                 case "La Forchetta":
                     localLongitude = locationHashmap.get(LA_FORCHETTA).get(LONGITUDE);
                     localLatitude = locationHashmap.get(CITTA_DORO).get(LATITUDE);
+                    break;
                 case "La Pizza Da Zero":
                     localLongitude = locationHashmap.get(LA_PIZZA_DA_ZERO).get(LONGITUDE);
                     localLatitude = locationHashmap.get(CITTA_DORO).get(LATITUDE);
+                    break;
                 case "Nuovo Caffè del Porto":
                     localLongitude = locationHashmap.get(NUOVO_CAFFE_DEL_PORTO).get(LONGITUDE);
                     localLatitude = locationHashmap.get(CITTA_DORO).get(LATITUDE);
+                    break;
                 case "Pokè Rainbow Caffè":
                     localLongitude = locationHashmap.get(POKE_RAINBOW_CAFFE).get(LONGITUDE);
                     localLatitude = locationHashmap.get(CITTA_DORO).get(LATITUDE);
+                    break;
                 case "Trattoria Belfiore":
                     localLongitude = locationHashmap.get(TRATTORIA_BELFIORE).get(LONGITUDE);
                     localLatitude = locationHashmap.get(CITTA_DORO).get(LATITUDE);
+                    break;
                 default:
-                    localLatitude = -1;
-                    localLongitude = -1;
+                    localLatitude = 0;
+                    localLongitude = 0;
+                    break;
             }
-
 
             double calculatedDistance = -1000;
             calculatedDistance = calculateDistanceOfTheUserFromTheLocal(latitude,longitude,localLatitude,localLongitude);
