@@ -3,7 +3,9 @@ package com.example.prova_app;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 
 import android.speech.RecognizerIntent;
@@ -13,9 +15,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Objects;
+
+import butterknife.OnClick;
 
 public class SpeechToTextActivity extends AppCompatActivity {
 
@@ -26,6 +34,8 @@ public class SpeechToTextActivity extends AppCompatActivity {
 
     //text to speech
     TextToSpeech tts;
+    String trovato;
+    StringBuilder text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,22 +80,24 @@ public class SpeechToTextActivity extends AppCompatActivity {
                         Objects.requireNonNull(result).get(0));
 
                 //text to speech
-                switch(result.get(0).toString()){
-                    case "Citta D'oro":
-                    case "Enoteca Italiana":
-                    case "Forno Brisa":
-                    case "La Forchetta":
-                    case "La Pizza Da Zero":
-                    case "Nuovo Caffè del Porto":
-                    case "Pokè Rainbow Caffè":
-                    case "Trattoria Belfiore":
+                switch(result.get(0).toString().toLowerCase()){
+                    case "citta d'oro":
+                    case "enoteca italiana":
+                    case "forno brisa":
+                    case "la forchetta":
+                    case "la pizza da zero":
+                    case "nuovo caffè del porto":
+                    case "pokè rainbow caffè":
+                    case "trattoria belfiore":
+                        trovato = result.get(0).toString();
                         tts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
                             @Override
                             public void onInit(int status) {
                                 if(status==TextToSpeech.SUCCESS){
                                     tts.setLanguage(Locale.getDefault());
                                     tts.setSpeechRate(1.0f);
-                                    tts.speak("Trattoria Belfiore",TextToSpeech.QUEUE_ADD,null);
+                                    tts.speak(result.get(0).toString()+", trovato!\n" + text.toString(),TextToSpeech.QUEUE_ADD,null);
+                                    tts.speak(text.toString(),TextToSpeech.QUEUE_ADD,null);
                                 }
                             }
                         });
@@ -102,6 +114,39 @@ public class SpeechToTextActivity extends AppCompatActivity {
                         });
                 }
             }
+        }
+    }
+
+    @OnClick({R.id.openMenu})
+    void openMenu(){
+        text = new StringBuilder();
+        BufferedReader reader = null;
+        Context context = this.getApplicationContext();
+        try {
+            AssetManager am = context.getAssets();
+            InputStream is = am.open(trovato+".txt");
+
+            reader = new BufferedReader(
+                    new InputStreamReader(is));
+
+            // do reading, usually loop until end of file reading
+            String mLine = null;
+            while ((mLine = reader.readLine()) != null) {
+                text.append(mLine);
+                text.append('\n');
+            }
+        } catch (IOException e) {
+            Toast.makeText(getApplicationContext(),"Error reading file!",Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    //log the exception
+                }
+            }
+            trovato = "";
         }
     }
 }
