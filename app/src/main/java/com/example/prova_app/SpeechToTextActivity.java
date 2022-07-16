@@ -101,6 +101,7 @@ public class SpeechToTextActivity extends AppCompatActivity {
                                 }
                             }
                         });
+                        break;
                     default:
                         tts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
                             @Override
@@ -112,6 +113,7 @@ public class SpeechToTextActivity extends AppCompatActivity {
                                 }
                             }
                         });
+                        break;
                 }
             }
         }
