@@ -77,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
 
     //Location variables
     FusedLocationProviderClient fusedLocationProviderClient;
-    Double latitude;
-    Double longitude;
+    Double latitude=0.0;
+    Double longitude=0.0;
 
     //Speech to text variables
     Button speech_to_text_button;
@@ -307,8 +307,8 @@ public class MainActivity extends AppCompatActivity {
             }
             else{
                 res +=textFromImage(bitmap1)+"\n";
-            }
 
+            }
             if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 getLocation();
@@ -317,9 +317,7 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 44);
             }
 
-            //getLocation();
 
-            /*
             double localLongitude;
             double localLatitude;
             switch(classes[maxPos]){
@@ -365,7 +363,7 @@ public class MainActivity extends AppCompatActivity {
                         "Latitude: " + latitude + "\n" +
                         "Longitude: " + longitude);
             }
-            */
+
             // Releases model resources if no longer used.
             model.close();
         } catch (IOException e) {
@@ -426,25 +424,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public String textFromImage(Bitmap image){
-        TextRecognizer recognizer=new TextRecognizer.Builder(this).build();
-        if(!recognizer.isOperational()){
-            Toast.makeText(MainActivity.this, "Error Occurred", Toast.LENGTH_SHORT).show();
-            return "isOperational";
-        }
-        else{
-            Frame frame=new Frame.Builder().setBitmap(image).build();
-            SparseArray<TextBlock> textBlockSparseArray=recognizer.detect(frame);
-            StringBuilder stringBuilder=new StringBuilder();
-            for(int i=0; i<textBlockSparseArray.size();i++){
-                TextBlock textBlock=textBlockSparseArray.valueAt(i);
-                stringBuilder.append(textBlock.getValue());
-                stringBuilder.append("/n");
-            }
-            return stringBuilder.toString();
-        }
-    }
-
     public void initializeHashMapValues(){
         HashMap<Integer,Double> locationHashmapData = new HashMap<Integer,Double>();
 
@@ -471,6 +450,27 @@ public class MainActivity extends AppCompatActivity {
         values.put(LATITUDE,latitude);
         return values;
     }
+
+
+    public String textFromImage(Bitmap image){
+        TextRecognizer recognizer=new TextRecognizer.Builder(this).build();
+        if(!recognizer.isOperational()){
+            Toast.makeText(MainActivity.this, "Error Occurred", Toast.LENGTH_SHORT).show();
+            return "isOperational";
+        }
+        else{
+            Frame frame=new Frame.Builder().setBitmap(image).build();
+            SparseArray<TextBlock> textBlockSparseArray=recognizer.detect(frame);
+            StringBuilder stringBuilder=new StringBuilder();
+            for(int i=0; i<textBlockSparseArray.size();i++){
+                TextBlock textBlock=textBlockSparseArray.valueAt(i);
+                stringBuilder.append(textBlock.getValue());
+                stringBuilder.append("/n");
+            }
+            return stringBuilder.toString();
+        }
+    }
+
 
     /**
      * Showing Alert Dialog with Settings option

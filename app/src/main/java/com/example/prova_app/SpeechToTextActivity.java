@@ -71,7 +71,7 @@ public class SpeechToTextActivity extends AppCompatActivity {
 
                 //text to speech
 
-                switch(result.get(0)){
+                switch(result.get(0).toString()){
                     case "Citta D'oro":
                     case "Enoteca Italiana":
                     case "Forno Brisa":
@@ -80,7 +80,16 @@ public class SpeechToTextActivity extends AppCompatActivity {
                     case "Nuovo Caffè del Porto":
                     case "Pokè Rainbow Caffè":
                     case "Trattoria Belfiore":
-                        //leggi il menu
+                        tts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+                            @Override
+                            public void onInit(int status) {
+                                if(status==TextToSpeech.SUCCESS){
+                                    tts.setLanguage(Locale.getDefault());
+                                    tts.setSpeechRate(1.0f);
+                                    tts.speak("Trattoria Belfiore",TextToSpeech.QUEUE_ADD,null);
+                                }
+                            }
+                        });
                     default:
                         tts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
                             @Override
