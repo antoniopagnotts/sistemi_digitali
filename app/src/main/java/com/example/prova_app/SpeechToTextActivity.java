@@ -70,7 +70,6 @@ public class SpeechToTextActivity extends AppCompatActivity {
                         Objects.requireNonNull(result).get(0));
 
                 //text to speech
-
                 switch(result.get(0).toString()){
                     case "Citta D'oro":
                     case "Enoteca Italiana":
