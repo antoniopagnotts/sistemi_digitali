@@ -78,8 +78,40 @@ public class SpeechToTextActivity extends AppCompatActivity {
                         Objects.requireNonNull(result).get(0));
 
                 //text to speech
+                String local = result.get(0).toString().toLowerCase()
                 String menu;
-                switch(result.get(0).toString().toLowerCase()){
+                HashMap<String,String> locals = new HashMap<>();
+                locals.put("citta d'oro","Città D'oro");
+                locals.put("forno brisa","Forno Brisa");
+                locals.put("la pizza da zero","La Pizza Da Zero");
+
+                if(hs.contains(local)){
+                    menu = openMenu(local);
+                        tts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+                            @Override
+                            public void onInit(int status) {
+                                if(status==TextToSpeech.SUCCESS){
+                                    tts.setLanguage(Locale.getDefault());
+                                    tts.setSpeechRate(1.0f);
+                                    tts.speak(local+", trovato!\n" + menu,TextToSpeech.QUEUE_ADD,null);
+                                }
+                            }
+                        });
+                } else {
+                    tts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+                            @Override
+                            public void onInit(int status) {
+                                if(status==TextToSpeech.SUCCESS){
+                                    tts.setLanguage(Locale.getDefault());
+                                    tts.setSpeechRate(1.0f);
+                                    tts.speak("Locale non riconosciuto, riprova!",TextToSpeech.QUEUE_ADD,null);
+                                }
+                            }
+                        });
+                }
+
+                
+                /*switch(result.get(0).toString().toLowerCase()){
                     case "citta d'oro":
                     case "enoteca italiana":
                     case "forno brisa":
@@ -88,7 +120,7 @@ public class SpeechToTextActivity extends AppCompatActivity {
                     case "nuovo caffè del porto":
                     case "pokè rainbow caffè":
                     case "trattoria belfiore":
-                        menu = openMenu(result.get(0).toString());
+                        menu = openMenu(result.get(0).toString().toLowerCase());
                         tts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
                             @Override
                             public void onInit(int status) {
@@ -111,7 +143,7 @@ public class SpeechToTextActivity extends AppCompatActivity {
                                 }
                             }
                         });
-                }
+                }*/
             }
         }
     }
@@ -134,7 +166,7 @@ public class SpeechToTextActivity extends AppCompatActivity {
                 text.append('\n');
             }
         } catch (IOException e) {
-            Toast.makeText(getApplicationContext(),"Error reading file!",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Error reading file!\n" + "." + local + ".",Toast.LENGTH_LONG).show();
             e.printStackTrace();
         } finally {
             if (reader != null) {
