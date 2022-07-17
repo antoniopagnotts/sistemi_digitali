@@ -89,7 +89,8 @@ public class SpeechToTextActivity extends AppCompatActivity {
                     case "nuovo caffè del porto":
                     case "pokè rainbow caffè":
                     case "trattoria belfiore":
-                        trovato = result.get(0).toString();
+                        trovato = result.get(0).toString().toLowerCase();
+                        openMenu();
                         tts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
                             @Override
                             public void onInit(int status) {
@@ -119,14 +120,14 @@ public class SpeechToTextActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick({R.id.openMenu})
+    //@OnClick({R.id.openMenu})
     void openMenu(){
         text = new StringBuilder();
         BufferedReader reader = null;
         Context context = this.getApplicationContext();
         try {
             AssetManager am = context.getAssets();
-            InputStream is = am.open(trovato+".txt");
+            InputStream is = am.open(trovato.toLowerCase()+".txt");
 
             reader = new BufferedReader(
                     new InputStreamReader(is));
