@@ -1,0 +1,3 @@
+Cibo                                Prezzo
+
+Pizza margherita                    7€
