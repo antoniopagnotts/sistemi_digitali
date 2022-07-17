@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -78,15 +79,15 @@ public class SpeechToTextActivity extends AppCompatActivity {
                         Objects.requireNonNull(result).get(0));
 
                 //text to speech
-                String local = result.get(0).toString().toLowerCase()
+                String local = result.get(0).toString().toLowerCase();
                 String menu;
                 HashMap<String,String> locals = new HashMap<>();
                 locals.put("citta d'oro","Città D'oro");
                 locals.put("forno brisa","Forno Brisa");
                 locals.put("la pizza da zero","La Pizza Da Zero");
 
-                if(hs.contains(local)){
-                    menu = openMenu(local);
+                if(locals.containsKey(local)){
+                    menu = openMenu(result.get(0).toString());
                         tts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
                             @Override
                             public void onInit(int status) {
