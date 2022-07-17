@@ -99,5 +99,4 @@
     <orderEntry type="library" scope="TEST" name="Gradle: org.tensorflow:tensorflow-lite-api:2.7.0@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.google.android.odml:image:1.0.0-beta1@aar" level="project" />
   </component>
-  <component name="TestModuleProperties" production-module="Prova_app.app.main" />
 </module>
