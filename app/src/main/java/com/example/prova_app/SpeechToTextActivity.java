@@ -111,7 +111,6 @@ public class SpeechToTextActivity extends AppCompatActivity {
                                 }
                             }
                         });
-                        break;
                 }
             }
         }
