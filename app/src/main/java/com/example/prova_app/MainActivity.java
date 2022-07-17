@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
         Context context = this.getApplicationContext();
         try {
             AssetManager am = context.getAssets();
-            InputStream is = am.open(trovato+".txt");
+            InputStream is = am.open(trovato.toLowerCase()+".txt");
 
             reader = new BufferedReader(
                     new InputStreamReader(is));

@@ -98,7 +98,6 @@ public class SpeechToTextActivity extends AppCompatActivity {
                                     tts.setLanguage(Locale.getDefault());
                                     tts.setSpeechRate(1.0f);
                                     tts.speak(result.get(0).toString()+", trovato!\n" + text.toString(),TextToSpeech.QUEUE_ADD,null);
-                                    tts.speak(text.toString(),TextToSpeech.QUEUE_ADD,null);
                                 }
                             }
                         });
