@@ -88,7 +88,7 @@ public class SpeechToTextActivity extends AppCompatActivity {
                     case "nuovo caffè del porto":
                     case "pokè rainbow caffè":
                     case "trattoria belfiore":
-                        menu = openMenu(result.get(0).toString().toLowerCase(););
+                        menu = openMenu(result.get(0).toString());
                         tts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
                             @Override
                             public void onInit(int status) {
