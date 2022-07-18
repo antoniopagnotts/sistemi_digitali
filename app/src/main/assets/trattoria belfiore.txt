@@ -1,3 +1,2 @@
-Cibo                                Prezzo
-
-Pizza margherita                    7€
+Panino mortazza 12€
+Hamburger 11€

@@ -84,14 +84,23 @@ public class MainActivity extends AppCompatActivity {
     Button speech_to_text_button;
 
     //Locations' data
-    final int CITTA_DORO = 0;
-    final int ENOTECA_ITALIANA = 1;
-    final int FORNO_BRISA = 2;
-    final int LA_FORCHETTA = 3;
-    final int LA_PIZZA_DA_ZERO = 4;
-    final int NUOVO_CAFFE_DEL_PORTO = 5;
-    final int POKE_RAINBOW_CAFFE = 6;
-    final int TRATTORIA_BELFIORE = 7;
+    final int BEIRUT_SNACK = 0;
+    final int BONELLI = 1;
+    final int CITTA_DORO = 2;
+    final int ENOTECA_ITALIANA = 3;
+    final int FORNO_BRISA = 4;
+    final int LA_CAVERNA = 5;
+    final int LA_FORCHETTA = 6;
+    final int LA_PIZZA_DA_ZERO = 7;
+    final int MYAKO = 8;
+    final int NUOVO_CAFFE_DEL_PORTO = 9;
+    final int OSTERIA_DELLE_MOLINE = 10;
+    final int PANZARO = 11;
+    final int POKE_RAINBOW_CAFFE = 12;
+    final int POKE_SHARK = 13;
+    final int TRATTORIA_BELFIORE = 14;
+    final int TRATTORIA_DA_PIETRO = 15;
+
     //data used in putCoordinate to set the hashMap values
     final int LATITUDE = 0;
     final int LONGITUDE = 1;
@@ -291,8 +300,25 @@ public class MainActivity extends AppCompatActivity {
             // find the index of the class with the biggest confidence.
             int maxPos = 0;
             float maxConfidence = 0;
-            String[] classes = {"Citta D'oro", "Enoteca Italiana", "Forno Brisa", "La Forchetta",
-                    "La Pizza Da Zero", "Nuovo Caffè del Porto", "Pokè Rainbow Caffè", "Trattoria Belfiore"};
+
+            String[] classes = {
+                    "Beirut Snack",
+                    "Bonelli",
+                    "Città D'oro",
+                    "Enoteca Italiana",
+                    "Forno Brisa",
+                    "La Caverna",
+                    "La Forchetta",
+                    "La Pizza Da Zero",
+                    "Myako",
+                    "Nuovo Caffè del Porto",
+                    "Osteria delle Moline",
+                    "Panzarò",
+                    "Pokè Rainbow Caffè",
+                    "Pokè Shark",
+                    "Trattoria Belfiore",
+                    "Trattoria Da Pietro"};
+
             for (int i = 0; i < confidences.length; i++) {
                 confidences[i]=confidences[i]*100;
             }
@@ -306,10 +332,12 @@ public class MainActivity extends AppCompatActivity {
             String res = "";
             if(maxConfidence>90){
                 res += String.format("%s: %.1f%%\n", classes[maxPos], confidences[maxPos]);
-            }
-            else{
-                res +=textFromImage(bitmap1)+"\n";
-
+            }else{
+                for (int i = 0; i < confidences.length; i++) {
+                    if(confidences[i]>20)
+                        res += String.format("%s: %.1f%%\n", classes[i], confidences[i]);
+                }
+                //res +=textFromImage(bitmap1)+"\n";
             }
             if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -318,7 +346,6 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 44);
             }
-
 
             double localLongitude;
             double localLatitude;
@@ -329,31 +356,63 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case "Enoteca Italiana":
                     localLongitude = locationHashmap.get(ENOTECA_ITALIANA).get(LONGITUDE);
-                    localLatitude = locationHashmap.get(CITTA_DORO).get(LATITUDE);
+                    localLatitude = locationHashmap.get(ENOTECA_ITALIANA).get(LATITUDE);
                     break;
                 case "Forno Brisa":
                     localLongitude = locationHashmap.get(FORNO_BRISA).get(LONGITUDE);
-                    localLatitude = locationHashmap.get(CITTA_DORO).get(LATITUDE);
+                    localLatitude = locationHashmap.get(FORNO_BRISA).get(LATITUDE);
                     break;
                 case "La Forchetta":
                     localLongitude = locationHashmap.get(LA_FORCHETTA).get(LONGITUDE);
-                    localLatitude = locationHashmap.get(CITTA_DORO).get(LATITUDE);
+                    localLatitude = locationHashmap.get(LA_FORCHETTA).get(LATITUDE);
                     break;
                 case "La Pizza Da Zero":
                     localLongitude = locationHashmap.get(LA_PIZZA_DA_ZERO).get(LONGITUDE);
-                    localLatitude = locationHashmap.get(CITTA_DORO).get(LATITUDE);
+                    localLatitude = locationHashmap.get(LA_PIZZA_DA_ZERO).get(LATITUDE);
                     break;
                 case "Nuovo Caffè del Porto":
                     localLongitude = locationHashmap.get(NUOVO_CAFFE_DEL_PORTO).get(LONGITUDE);
-                    localLatitude = locationHashmap.get(CITTA_DORO).get(LATITUDE);
+                    localLatitude = locationHashmap.get(NUOVO_CAFFE_DEL_PORTO).get(LATITUDE);
                     break;
                 case "Pokè Rainbow Caffè":
                     localLongitude = locationHashmap.get(POKE_RAINBOW_CAFFE).get(LONGITUDE);
-                    localLatitude = locationHashmap.get(CITTA_DORO).get(LATITUDE);
+                    localLatitude = locationHashmap.get(POKE_RAINBOW_CAFFE).get(LATITUDE);
                     break;
                 case "Trattoria Belfiore":
                     localLongitude = locationHashmap.get(TRATTORIA_BELFIORE).get(LONGITUDE);
-                    localLatitude = locationHashmap.get(CITTA_DORO).get(LATITUDE);
+                    localLatitude = locationHashmap.get(TRATTORIA_BELFIORE).get(LATITUDE);
+                    break;
+                case "Beirut Snack":
+                    localLongitude = locationHashmap.get(BEIRUT_SNACK).get(LONGITUDE);
+                    localLatitude = locationHashmap.get(BEIRUT_SNACK).get(LATITUDE);
+                    break;
+                case "Bonelli":
+                    localLongitude = locationHashmap.get(BONELLI).get(LONGITUDE);
+                    localLatitude = locationHashmap.get(BONELLI).get(LATITUDE);
+                    break;
+                case "La Caverna":
+                    localLongitude = locationHashmap.get(LA_CAVERNA).get(LONGITUDE);
+                    localLatitude = locationHashmap.get(LA_CAVERNA).get(LATITUDE);
+                    break;
+                case "Myako":
+                    localLongitude = locationHashmap.get(MYAKO).get(LONGITUDE);
+                    localLatitude = locationHashmap.get(MYAKO).get(LATITUDE);
+                    break;
+                case "Osteria delle Moline":
+                    localLongitude = locationHashmap.get(OSTERIA_DELLE_MOLINE).get(LONGITUDE);
+                    localLatitude = locationHashmap.get(OSTERIA_DELLE_MOLINE).get(LATITUDE);
+                    break;
+                case "Panzarò":
+                    localLongitude = locationHashmap.get(PANZARO).get(LONGITUDE);
+                    localLatitude = locationHashmap.get(PANZARO).get(LATITUDE);
+                    break;
+                case "Pokè Shark":
+                    localLongitude = locationHashmap.get(POKE_SHARK).get(LONGITUDE);
+                    localLatitude = locationHashmap.get(POKE_SHARK).get(LATITUDE);
+                    break;
+                case "Trattoria Da Pietro":
+                    localLongitude = locationHashmap.get(TRATTORIA_DA_PIETRO).get(LONGITUDE);
+                    localLatitude = locationHashmap.get(TRATTORIA_DA_PIETRO).get(LATITUDE);
                     break;
                 default:
                     localLatitude = 0;
@@ -361,19 +420,18 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
 
-            double calculatedDistance = -1000;
+            double calculatedDistance = 1000;
             calculatedDistance = calculateDistanceOfTheUserFromTheLocal(latitude,longitude,localLatitude,localLongitude);
             //considering the accurancy of google maps (20 meters circa), we consider for a good accurancy 30meters
             if(calculatedDistance>30){
-                result.setText("\n" + "You are far away from the local ("+ calculatedDistance + " meters)!\n" + res + classes[maxPos] + "\n" +
+                result.setText("\n" + "You are far away from the local ("+ calculatedDistance + " meters)!\n" + res + "\n" +
                         "Latitude: " + latitude + "\n" +
                         "Longitude: " + longitude);
             } else {
-                result.setText("\n" + "You are at "+ calculatedDistance + " meters from the local.\n"  + res + classes[maxPos] + "\n" +
+                result.setText("\n" + "You are at "+ calculatedDistance + " meters from the local.\n"  + res + "\n" +
                         "Latitude: " + latitude + "\n" +
                         "Longitude: " + longitude);
             }
-
             // Releases model resources if no longer used.
             model.close();
         } catch (IOException e) {
@@ -397,7 +455,7 @@ public class MainActivity extends AppCompatActivity {
         double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
                 Math.cos(degreeToRadiant(lat1)) * Math.cos(degreeToRadiant(lat2)) *
                         Math.sin(dLon/2) * Math.sin(dLon/2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double c = Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         double d = R * c;
         return d;
     }
@@ -449,10 +507,19 @@ public class MainActivity extends AppCompatActivity {
         this.locationHashmap.put(ENOTECA_ITALIANA,putCoordinate(44.4967059,11.3391671));
         this.locationHashmap.put(FORNO_BRISA,putCoordinate(44.4967052,11.3391671));
         this.locationHashmap.put(LA_FORCHETTA,putCoordinate(44.5080911,11.3520538));
-        this.locationHashmap.put(LA_PIZZA_DA_ZERO,putCoordinate(0.0,0.0));
+        this.locationHashmap.put(LA_PIZZA_DA_ZERO,putCoordinate(44.4966059,11.3392671));
         this.locationHashmap.put(NUOVO_CAFFE_DEL_PORTO,putCoordinate(44.5012647,11.3309974));
         this.locationHashmap.put(POKE_RAINBOW_CAFFE,putCoordinate(44.4985837,11.3294094));
         this.locationHashmap.put(TRATTORIA_BELFIORE,putCoordinate(44.4974444,11.3359676));
+
+        this.locationHashmap.put(BEIRUT_SNACK,putCoordinate(44.4981302,11.345195));
+        this.locationHashmap.put(BONELLI,putCoordinate(44.4986933,11.3377552));
+        this.locationHashmap.put(LA_CAVERNA,putCoordinate(44.4977071,11.3464599));
+        this.locationHashmap.put(MYAKO,putCoordinate(44.5080911,11.3520538));
+        this.locationHashmap.put(OSTERIA_DELLE_MOLINE,putCoordinate(44.497815,11.3478201));
+        this.locationHashmap.put(PANZARO,putCoordinate(44.4985733,11.3445127));
+        this.locationHashmap.put(POKE_SHARK,putCoordinate(44.4982402,11.3357261));
+        this.locationHashmap.put(TRATTORIA_DA_PIETRO,putCoordinate(44.4981958,11.3439585));
 
     }
 
