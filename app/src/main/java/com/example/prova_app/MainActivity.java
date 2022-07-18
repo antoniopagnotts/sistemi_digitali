@@ -383,10 +383,23 @@ public class MainActivity extends AppCompatActivity {
                     result.setText("\n" + res + "\n" +
                             "You are far away from the local ("+ calculatedDistance + " meters)!\n" +
                             "if you want to see the menù click\n"+
-                            "OPEN MENU");
+                            "OPEN MENU\n"+
+                            latitude+"\n"+
+                            longitude+"\n"+
+                            calculatedDistance);
                 } else {
+                    result.setText(res+"\n"+
+                            latitude+"\n"+
+                            longitude+"\n"+
+                            calculatedDistance);
                     openMenu();
                 }
+            }else{
+                result.setText("Restaurant not recognized, retry!"+
+                        res+"\n"+
+                        latitude+"\n"+
+                        longitude+"\n"+
+                        calculatedDistance);
             }
             // Releases model resources if no longer used.
             model.close();
