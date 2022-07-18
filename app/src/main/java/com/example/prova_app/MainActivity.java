@@ -65,7 +65,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
-    private String trovato = null;
+    private String locale;
     private static final String TAG = MainActivity.class.getSimpleName();
     public static final int REQUEST_IMAGE = 100;
     int imageSize = 160;
@@ -154,7 +154,6 @@ public class MainActivity extends AppCompatActivity {
                             showSettingsDialog();
                         }
                     }
-
                     @Override
                     public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
                         token.continuePermissionRequest();
@@ -222,48 +221,10 @@ public class MainActivity extends AppCompatActivity {
 
                     bitmap1 = Bitmap.createScaledBitmap(bitmap1, imageSize, imageSize, false);
 
-                    //classifyImage();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-        }
-    }
-
-    @OnClick({R.id.openMenu})
-    void openMenu(){
-        TextView output= (TextView) findViewById(R.id.result);
-        StringBuilder text = new StringBuilder();
-        output.setText("");
-        BufferedReader reader = null;
-        Context context = this.getApplicationContext();
-        try {
-            AssetManager am = context.getAssets();
-            
-            InputStream is = am.open(trovato+".txt");
-
-            reader = new BufferedReader(
-                    new InputStreamReader(is));
-
-            // do reading, usually loop until end of file reading
-            String mLine = null;
-            while ((mLine = reader.readLine()) != null) {
-                text.append(mLine);
-                text.append('\n');
-            }
-        } catch (IOException e) {
-            Toast.makeText(getApplicationContext(),"Error reading file!",Toast.LENGTH_LONG).show();
-            e.printStackTrace();
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    //log the exception
-                }
-            }
-            output.setText((CharSequence) text);
-            trovato = "";
         }
     }
 
@@ -304,20 +265,21 @@ public class MainActivity extends AppCompatActivity {
             String[] classes = {
                     "Beirut Snack",
                     "Bonelli",
-                    "Città D'oro",
+                    "Città D'oro",
                     "Enoteca Italiana",
                     "Forno Brisa",
                     "La Caverna",
                     "La Forchetta",
                     "La Pizza Da Zero",
                     "Myako",
-                    "Nuovo Caffè del Porto",
-                    "Osteria delle Moline",
-                    "Panzarò",
-                    "Pokè Rainbow Caffè",
-                    "Pokè Shark",
+                    "Nuovo Caffè Del Porto",
+                    "Osteria Delle Moline",
+                    "Panzarò",
+                    "Pokè Rainbow Caffè",
+                    "Pokè Shark",
                     "Trattoria Belfiore",
-                    "Trattoria Da Pietro"};
+                    "Trattoria Da Pietro"
+            };
 
             for (int i = 0; i < confidences.length; i++) {
                 confidences[i]=confidences[i]*100;
@@ -328,17 +290,8 @@ public class MainActivity extends AppCompatActivity {
                     maxPos = i;
                 }
             }
-            trovato = classes[maxPos];
-            String res = "";
-            if(maxConfidence>90){
-                res += String.format("%s: %.1f%%\n", classes[maxPos], confidences[maxPos]);
-            }else{
-                for (int i = 0; i < confidences.length; i++) {
-                    if(confidences[i]>20)
-                        res += String.format("%s: %.1f%%\n", classes[i], confidences[i]);
-                }
-                //res +=textFromImage(bitmap1)+"\n";
-            }
+            locale = classes[maxPos].toLowerCase();
+
             if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 getLocation();
@@ -346,11 +299,10 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 44);
             }
-
             double localLongitude;
             double localLatitude;
             switch(classes[maxPos]){
-                case "Citta D'oro":
+                case "Città D'oro":
                     localLongitude = locationHashmap.get(CITTA_DORO).get(LONGITUDE);
                     localLatitude = locationHashmap.get(CITTA_DORO).get(LATITUDE);
                     break;
@@ -370,7 +322,7 @@ public class MainActivity extends AppCompatActivity {
                     localLongitude = locationHashmap.get(LA_PIZZA_DA_ZERO).get(LONGITUDE);
                     localLatitude = locationHashmap.get(LA_PIZZA_DA_ZERO).get(LATITUDE);
                     break;
-                case "Nuovo Caffè del Porto":
+                case "Nuovo Caffè Del Porto":
                     localLongitude = locationHashmap.get(NUOVO_CAFFE_DEL_PORTO).get(LONGITUDE);
                     localLatitude = locationHashmap.get(NUOVO_CAFFE_DEL_PORTO).get(LATITUDE);
                     break;
@@ -398,15 +350,15 @@ public class MainActivity extends AppCompatActivity {
                     localLongitude = locationHashmap.get(MYAKO).get(LONGITUDE);
                     localLatitude = locationHashmap.get(MYAKO).get(LATITUDE);
                     break;
-                case "Osteria delle Moline":
+                case "Osteria Delle Moline":
                     localLongitude = locationHashmap.get(OSTERIA_DELLE_MOLINE).get(LONGITUDE);
                     localLatitude = locationHashmap.get(OSTERIA_DELLE_MOLINE).get(LATITUDE);
                     break;
-                case "Panzarò":
+                case "Panzarò":
                     localLongitude = locationHashmap.get(PANZARO).get(LONGITUDE);
                     localLatitude = locationHashmap.get(PANZARO).get(LATITUDE);
                     break;
-                case "Pokè Shark":
+                case "Pokè Shark":
                     localLongitude = locationHashmap.get(POKE_SHARK).get(LONGITUDE);
                     localLatitude = locationHashmap.get(POKE_SHARK).get(LATITUDE);
                     break;
@@ -420,22 +372,62 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
 
+            String res = String.format("%s: %.1f%%\n", classes[maxPos], confidences[maxPos]);
+            //res +=textFromImage(bitmap1)+"\n";
+
             double calculatedDistance = 1000;
             calculatedDistance = calculateDistanceOfTheUserFromTheLocal(latitude,longitude,localLatitude,localLongitude);
             //considering the accurancy of google maps (20 meters circa), we consider for a good accurancy 30meters
-            if(calculatedDistance>30){
-                result.setText("\n" + "You are far away from the local ("+ calculatedDistance + " meters)!\n" + res + "\n" +
-                        "Latitude: " + latitude + "\n" +
-                        "Longitude: " + longitude);
-            } else {
-                result.setText("\n" + "You are at "+ calculatedDistance + " meters from the local.\n"  + res + "\n" +
-                        "Latitude: " + latitude + "\n" +
-                        "Longitude: " + longitude);
+            if(confidences[maxPos]>90){
+                if(calculatedDistance>30){
+                    result.setText("\n" + res + "\n" +
+                            "You are far away from the local ("+ calculatedDistance + " meters)!\n" +
+                            "if you want to see the menù click\n"+
+                            "OPEN MENU");
+                } else {
+                    openMenu();
+                }
             }
             // Releases model resources if no longer used.
             model.close();
         } catch (IOException e) {
             // TODO Handle the exception
+        }
+    }
+
+    @OnClick({R.id.openMenu})
+    void openMenu(){
+        TextView output= (TextView) findViewById(R.id.result);
+        StringBuilder text = new StringBuilder();
+        output.setText("");
+        BufferedReader reader = null;
+        Context context = this.getApplicationContext();
+        try {
+            AssetManager am = context.getAssets();
+            InputStream is = am.open(locale+".txt");
+
+            reader = new BufferedReader(
+                    new InputStreamReader(is));
+
+            // do reading, usually loop until end of file reading
+            String mLine = null;
+            while ((mLine = reader.readLine()) != null) {
+                text.append(mLine);
+                text.append('\n');
+            }
+        } catch (IOException e) {
+            Toast.makeText(getApplicationContext(),"Error reading file!",Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            output.setText((CharSequence) text);
+            locale = "";
         }
     }
 
