@@ -390,8 +390,9 @@ public class MainActivity extends AppCompatActivity {
             }
             // Releases model resources if no longer used.
             model.close();
-        } catch (IOException e) {
-            // TODO Handle the exception
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(),"Take a photo!",Toast.LENGTH_LONG).show();
+            e.printStackTrace();
         }
     }
 
