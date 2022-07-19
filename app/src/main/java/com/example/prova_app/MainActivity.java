@@ -299,6 +299,7 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 44);
             }
+
             double localLongitude;
             double localLatitude;
             switch(classes[maxPos]){
@@ -374,32 +375,21 @@ public class MainActivity extends AppCompatActivity {
 
             String res = String.format("%s: %.1f%%\n", classes[maxPos], confidences[maxPos]);
             //res +=textFromImage(bitmap1)+"\n";
-
-            double calculatedDistance = 1000;
+            double calculatedDistance = -1000;
             calculatedDistance = calculateDistanceOfTheUserFromTheLocal(latitude,longitude,localLatitude,localLongitude);
             //considering the accurancy of google maps (20 meters circa), we consider for a good accurancy 30meters
-            if(confidences[maxPos]>90){
+            if(confidences[maxPos]>70){
                 if(calculatedDistance>30){
                     result.setText("\n" + res + "\n" +
                             "You are far away from the local ("+ calculatedDistance + " meters)!\n" +
                             "if you want to see the menù click\n"+
-                            "OPEN MENU\n"+
-                            latitude+"\n"+
-                            longitude+"\n"+
-                            calculatedDistance);
+                            "MENU\n"
+                    );
                 } else {
-                    result.setText(res+"\n"+
-                            latitude+"\n"+
-                            longitude+"\n"+
-                            calculatedDistance);
                     openMenu();
                 }
             }else{
-                result.setText("Restaurant not recognized, retry!"+
-                        res+"\n"+
-                        latitude+"\n"+
-                        longitude+"\n"+
-                        calculatedDistance);
+                result.setText("Restaurant not recognized, retry!");
             }
             // Releases model resources if no longer used.
             model.close();
@@ -441,7 +431,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             output.setText((CharSequence) text);
-            locale = "";
         }
     }
 
@@ -462,7 +451,7 @@ public class MainActivity extends AppCompatActivity {
                 Math.cos(degreeToRadiant(lat1)) * Math.cos(degreeToRadiant(lat2)) *
                         Math.sin(dLon/2) * Math.sin(dLon/2);
         double c = Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        double d = R * c;
+        double d = R * c * 1000;
         return d;
     }
 
