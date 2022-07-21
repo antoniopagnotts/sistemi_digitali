@@ -104,7 +104,7 @@ public class SpeechToTextActivity extends AppCompatActivity {
                                 if(status==TextToSpeech.SUCCESS){
                                     tts.setLanguage(Locale.getDefault());
                                     tts.setSpeechRate(1.0f);
-                                    tts.speak(result.get(0).toString()+", trovato!\n" + menu,TextToSpeech.QUEUE_ADD,null);
+                                    tts.speak(menu,TextToSpeech.QUEUE_ADD,null);
                                 }
                             }
                         });
@@ -150,7 +150,7 @@ public class SpeechToTextActivity extends AppCompatActivity {
                 try {
                     reader.close();
                 } catch (IOException e) {
-                    //log the exception
+                    e.printStackTrace();
                 }
             }
         }

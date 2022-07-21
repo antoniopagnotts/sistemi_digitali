@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private String locale;
     private static final String TAG = MainActivity.class.getSimpleName();
     public static final int REQUEST_IMAGE = 100;
-    int imageSize = 160;
+    int imageSize = 224;
     @BindView(R.id.imageView)
     ImageView imgProfile;
     @BindView(R.id.result)
@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
             Model model = Model.newInstance(getApplicationContext());
 
             // Creates inputs for reference.
-            TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 160, 160, 3}, DataType.FLOAT32);
+            TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 224, 224, 3}, DataType.FLOAT32);
             ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * imageSize * imageSize * 3);
             byteBuffer.order(ByteOrder.nativeOrder());
 
@@ -374,12 +374,13 @@ public class MainActivity extends AppCompatActivity {
             }
 
             String res = String.format("%s: %.1f%%\n", classes[maxPos], confidences[maxPos]);
-            //res +=textFromImage(bitmap1)+"\n";
+            //String textFromImg=textFromImage(bitmap1);
+            //res +=textFromImg.substring(0,textFromImg.length()-2)+"\n";
             double calculatedDistance = -1000;
             calculatedDistance = calculateDistanceOfTheUserFromTheLocal(latitude,longitude,localLatitude,localLongitude);
             //considering the accurancy of google maps (20 meters circa), we consider for a good accurancy 30meters
             if(confidences[maxPos]>70){
-                if(calculatedDistance>30){
+                if(calculatedDistance>30){      //da togliere true
                     result.setText("\n" + res + "\n" +
                             "You are far away from the local ("+ calculatedDistance + " meters)!\n" +
                             "if you want to see the menù click\n"+
